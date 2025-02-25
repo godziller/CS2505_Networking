@@ -1,20 +1,24 @@
 # from the socket module import all
-<INSERT CODE TO IMPORT SOCKET MODULE>
+from socket import *
 
 # Create a TCP server socket
 # Create a TCP socket using the "socket" method
 # Hints: AF_INET is used for IPv4 protocols, SOCK_STREAM is used for TCP 
-<INSERT CALL TO CREATE THE SOCKET>
+
+server_socket = socket(AF_INET, SOCK_STREAM)
 
 # set values for host 'localhost' - meaning this machine and port number 10000
 server_address = ('localhost', 10000)
 # output to terminal some info on the address details
 print('*** Server is starting up on %s port %s ***' % server_address)
 # Bind the socket to the host and port
-<INSERT CODE TO BIND SERVER ADDRESS TO SOCKET>
+
+server_socket.bind(server_address)
 
 # Listen for one incoming connections to the server
-<INSERT CODE TO TELL SERVER TO LISTEN FOR ONE INCOMING CONNECTION>
+
+#<INSERT CODE TO TELL SERVER TO LISTEN FOR ONE INCOMING CONNECTION>
+server_socket.listen()
 
 # we want the server to run all the time, so set up a forever true while loop
 while True:
@@ -22,7 +26,8 @@ while True:
     # Now the server waits for a connection
     print('*** Waiting for a connection ***')
     # accept() returns an open connection between the server and client, along with the address of the client
-    connection, client_address = <INSERT CODE TO ACCEPT THE CONNECTION REQUEST FROM THE CLIENT>
+
+    connection, client_address = server_socket.accept()
     
     try:
         print('connection from', client_address)
@@ -42,11 +47,14 @@ while True:
             
     finally:
         # Clean up the connection
-        <INSERT CODE TO CLOSE THE CONNECTION>
+
+        #<INSERT CODE TO CLOSE THE CONNECTION>
+        connection.close()
+
 
 # now close the socket
-<INSERT CODE TO CLOSE THE SOCKET>
-
+#<INSERT CODE TO CLOSE THE SOCKET>
+socket.close()
 
 
 # UCC CS2505
