@@ -5,6 +5,12 @@ from socket import *
 # Hints: AF_INET is used for IPv4 protocols, SOCK_STREAM is used for TCP 
 #<INSERT CALL TO CREATE THE SOCKET>
 client_socket = socket(AF_INET, SOCK_STREAM)
+
+# If i want my client to talk to a server on a different machine i will have to
+# hard code the server ip address here... host_ip = xxx.xxx.xxx.xxx
+# below only works with the client and server on the same machine USING
+# the actual ip address (not the loopback address)
+
 host_ip = gethostbyname(gethostname()+'.local')
 
 # set values for host 'localhost' - meaning this machine and port number 10000
