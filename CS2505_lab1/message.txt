@@ -1,0 +1,2 @@
+te the Client code, so that the input sentence being sent to the Server is read from the command line and send the input sentence to the server. (Hint: use the input method).
+Update the Server code, so that the input sentence from the client is saved to a file along with the time and date it was received, thus creating a form of log file. Update the sentence being returned to the client, so it informs the client the time the Server logged the sentence it sent - as a form of acknowledgement.  The log file should be located in the same folder as the s
