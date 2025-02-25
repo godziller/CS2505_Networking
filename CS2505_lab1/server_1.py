@@ -35,7 +35,7 @@ while True:
         # Receive the data in small chunks and retransmit it
         while True:
             # decode() function returns string object
-            data = connection.recv(1024).decode()
+            data = connection.recv(16).decode()
             if data:
                 print('received "%s"' % data)
                 print('sending data back to the client')

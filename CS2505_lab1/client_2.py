@@ -5,8 +5,7 @@ from socket import *
 # Hints: AF_INET is used for IPv4 protocols, SOCK_STREAM is used for TCP 
 #<INSERT CALL TO CREATE THE SOCKET>
 client_socket = socket(AF_INET, SOCK_STREAM)
-host_name = gethostname()
-host_ip = gethostbyname(host_name)
+host_ip = gethostbyname(gethostname()+'.local')
 
 # set values for host 'localhost' - meaning this machine and port number 10000
 # the machine address and port number have to be the same as the server is using.
@@ -35,7 +34,7 @@ try:
     while amount_received < amount_expected:
     	# Data is read from the connection with recv()
         # decode() function returns string object
-        data = client_socket.recv(1024).decode()
+        data = client_socket.recv(16).decode()
         amount_received += len(data)
         print('received "%s"' % data)
 
