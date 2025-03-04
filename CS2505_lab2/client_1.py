@@ -1,86 +1,72 @@
-# from the socket module import all
 from socket import *
 import ipaddress
 
-# Create a TCP socket using the "socket" method
-# Hints: AF_INET is used for IPv4 protocols, SOCK_STREAM is used for TCP 
-#<INSERT CALL TO CREATE THE SOCKET>
+# Create a TCP client socket
 client_socket = socket(AF_INET, SOCK_STREAM)
 
-# If i want my client to talk to a server on a different machine i will have to
-# hard code the server ip address here... host_ip = xxx.xxx.xxx.xxx
-# below only works with the client and server on the same machine USING
-# the actual ip address (not the loopback address)
-
-#host_ip = gethostbyname(gethostname()+".local")
-
+# Get a valid server IP address from the user
 while True:
-    try: 
+    try:
         host_ip = input("Enter the server address to connect to: ")
-        ipaddress.ip_address(host_ip)
+        ipaddress.ip_address(host_ip)  # Validate the IP format
         break
-    except:
-        print('Please enter valid server IP')
+    except ValueError:
+        print("Please enter a valid server IP.")
 
-# set values for host 'localhost' - meaning this machine and port number 10000
-# the machine address and port number have to be the same as the server is using.
-# read user input for port number 
-
+# Get the server's port number
 while True:
     try:
         port_number = int(input("Enter the Server's Port Number: "))
         break
-    except:
-        print("Please enter a valid port number(integer)")
+    except ValueError:
+        print("Please enter a valid port number (integer).")
 
+# Define the server address
 server_address = (host_ip, port_number)
-client_address = gethostbyname(gethostname()+'.local')
 
-# output to terminal some info on the address details
-print('connecting to server at %s port %s' % server_address)
-# Connect the socket to the host and port
-#<INSERT CALL TO CONNECT TO SERVER>
+# Get the client machine's address (using .local to resolve to local network address)
+client_address = gethostbyname(gethostname() + '.local')
+
+# Connect to the server
+print(f"Connecting to server at {host_ip} on port {port_number}...")
 client_socket.connect(server_address)
+print("Connection established.")
 
+# Communication loop
 while True:
     try:
-    
-        # Send data
-        #message = 'This is the message from the client to the server.'
-        #read input
-        
+        # Get the message from the user
         message = input("Please enter message to send: ")
-        message = client_address + ': ' + message
-        
-        # I need this to allow the other party figure out how to terminate
-        message += '\n'
-        
-        # Data is transmitted to the server with sendall()
-        # encode() function returns bytes object
+        message = client_address + ': ' + message  # Prepend the client address
+        message += '\n'  # Add newline to indicate message end
+        print ("Client> " + message)
+
+        # Send the message to the server
         client_socket.sendall(message.encode())
 
-        # Look for the response
-        recieved_message = ""
-
-        #this chunk of code with go around until it reads a string with '\n' (i.e the last byte sent) we then concatonate all things.
+        # Receive the response from the server
+        received_message = ""
         while True:
-    	    # Data is read from the connection with recv()
-            # decode() function returns string object
-            data = client_socket.recv(32).decode()
-            if "\n" in data:
-                recieved_message += data
-                break
-            else:
-                recieved_message += data
-        print(recieved_message)
+            data = client_socket.recv(32).decode()  # Decode to string
 
+            if not data:  # If no data is received, client may have closed the connection
+                print(f"No more data from {client_address}")
+                break
+
+            # Append the received data to the message
+            received_message += data
+
+            # If a newline is detected, consider the message fully received
+            if '\n' in received_message:
+                print(f"Server> " + received_message)
+                break
+
+        print("Server response:", received_message.strip())  # Display the server's message
 
     except KeyboardInterrupt:
-        print('closing socket')
-        # <INSERT CALL TO CLOSE SOCKET>
-        client_socket.close()
+        print('Closing socket.')
+        break  # Exit the loop and close the connection when interrupted
 
-
-
-# UCC CS2505
-
+# Close the socket after communication ends
+client_socket.close()
+print("Socket closed.")

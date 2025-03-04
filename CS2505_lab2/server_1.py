@@ -1,109 +1,90 @@
-# from the socket module import all
 from socket import *
-from datetime import *
+from datetime import datetime
 
 # Create a TCP server socket
-# Create a TCP socket using the "socket" method
-# Hints: AF_INET is used for IPv4 protocols, SOCK_STREAM is used for TCP 
-
 server_socket = socket(AF_INET, SOCK_STREAM)
-#.local here insures i get the network card ip address, 
-#not the local host (127.0.1.1) ip address.
-#if i remove + '.local' it will return the 
-#127.
-#the client has to mirror this even on the same machine.
-server_ip = gethostbyname(gethostname()+'.local') 
 
-# set values for host 'localhost' - meaning this machine and port number 10000
-# server_address = (server_ip, 10000)
-# there are 65k plus potential port numbers. However up to 1024 are typically
-# reserved for well agreed services like HTTP(80)
-# set port_number to user input -> error check for valid number i.e. int
-# enter port number between number (0-65535)
+# Obtain the local IP address using '.local' to avoid using localhost (127.0.1.1)
+server_ip = gethostbyname(gethostname() + '.local')
 
+# Ask the user for a valid port number between 0 and 65535
 while True:
     try:
-        port_number = int(input("Enter Port Number((0-65535)): "))
-        break
-    except:
-        print("Please enter a valid port number(integer)")
-
-
+        port_number = int(input("Enter Port Number (0-65535): "))
+        if 0 <= port_number <= 65535:
+            break
+        else:
+            print("Port number must be between 0 and 65535. Try again.")
+    except ValueError:
+        print("Invalid input. Please enter a valid integer.")
 
 server_address = (server_ip, port_number)
 
-# output to terminal some info on the address details
-print('*** Server is starting up on %s port %s ***' % server_address)
-
-# print the IP of the local machine
+# Output some information to the terminal about the server's setup
+print(f'*** Server is starting up on {server_ip} port {port_number} ***')
 print(f"Currently Serving on Local Machine: {server_ip}")
 
-# Bind the socket to the host and port
-# This will tell the operating system to reserve the port number exclusivly
-# for my server here. Anyone else trying to use this port number will fail.
-
+# Bind the server socket to the provided address and port
 server_socket.bind(server_address)
 
-# Listen for one incoming connections to the server
+# Listen for incoming connections (allowing up to 5 pending connections)
+server_socket.listen(5)
 
-#<INSERT CODE TO TELL SERVER TO LISTEN FOR ONE INCOMING CONNECTION>
-server_socket.listen()
+# Open log file to log server activity
+log = open('log.txt', "w")
 
-#instantiating log.:
-log = open('log.txt',"w")
-
-# we want the server to run all the time, so set up a forever true while loop
 try:
     # Now the server waits for a connection
     print('*** Waiting for a connection ***')
-    # accept() returns an open connection between the server and client, along with the address of the client. The server will block waiting here. On the client side call to connect() will unblock this
-    now = datetime.now()
+    # Accept an incoming connection (this call will block until a connection is made)
     connection, client_address = server_socket.accept()
-    print('connection from', client_address)
+    print(f'Connection established from {client_address}')
 
-    while True:        
+    while True:
         try:
-            # Receive the data in small chunks and retransmit it
-            recieved_message = ""
-
+            # Initialize an empty string to store the received message
+            received_message = ""
 
             while True:
-                # decode() function returns string object
+                # Receive data in chunks from the client
+                data = connection.recv(32).decode()  # Decode to string
 
-                data = connection.recv(32).decode()
-
-                if '\n' in data:
-                    
-                    recieved_message += data
-                    
-                    t = now.strftime("%m/%d/%Y, %H:%M:%S")
-                    log.write(f"DATE: {t}, USER: {client_address}, PORT: {port_number}")
-
+                if not data:  # If no data is received, client may have closed the connection
+                    print(f"No more data from {client_address}")
                     break
-                else:
-                    print('no more data from', client_address)
-                    recieved_message += data
+
+                # Append the received data to the message
+                received_message += data
+
+                # If a newline is detected, consider the message fully received
+                if '\n' in received_message:
+                    print(f"Server> " + received_message)
+                    break
+
+            # Log the timestamp of the received message
+            t = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+            log.write(f"DATE: {t}, USER: {client_address}, PORT: {port_number}, MESSAGE: {received_message}\n")
+
+            # Ask the server operator for a message to send back to the client
             message = input("Please enter message to send: ")
-            #logic for the server to send messages to client.
-            print ("ME> " + message)
-            message = str(gethostbyname(gethostname()+'.local')) + ': ' + message
-                   # encode() function returns bytes object
+            message = server_ip + ': ' + message
+            message += '\n'
+            print(f"ME> {message}")
+
+            # Send the message back to the client
             connection.sendall(message.encode())
 
+        except Exception as e:
+            print(f"Error while handling data: {e}")
+            break
+
 except KeyboardInterrupt:
-    # now close the socket
-    #<INSERT CODE TO CLOSE THE SOCKET>
-    print("Server interupted by Ctrl-C, closing socket")
-    server_socket.close()
-    log.close()
+    print("Server interrupted by Ctrl-C, closing socket.")
 
 finally:
-    # Clean up the connection
-
-    #<INSERT CODE TO CLOSE THE CONNECTION>
+    # Clean up the connections and close the server socket and log file
     connection.close()
-
-
-
-# UCC CS2505
+    server_socket.close()
+    log.close()
+    print("Server shut down successfully.")
 
