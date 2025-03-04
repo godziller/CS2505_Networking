@@ -54,18 +54,15 @@ log = open('log.txt',"w")
 
 # we want the server to run all the time, so set up a forever true while loop
 try:
-    while True:
+    # Now the server waits for a connection
+    print('*** Waiting for a connection ***')
+    # accept() returns an open connection between the server and client, along with the address of the client. The server will block waiting here. On the client side call to connect() will unblock this
+    now = datetime.now()
+    connection, client_address = server_socket.accept()
+    print('connection from', client_address)
 
-        # Now the server waits for a connection
-        print('*** Waiting for a connection ***')
-        # accept() returns an open connection between the server and client, along with the address of the client. The server will block waiting here. On the client side call to connect() will unblock this 
-        now = datetime.now()
-        connection, client_address = server_socket.accept()
-        
+    while True:        
         try:
-            print('connection from', client_address)
-            #enter logic for log insertion.
-
             # Receive the data in small chunks and retransmit it
             recieved_message = ""
 
@@ -93,19 +90,19 @@ try:
                    # encode() function returns bytes object
             connection.sendall(message.encode())
 
-
-        finally:
-            # Clean up the connection
-
-            #<INSERT CODE TO CLOSE THE CONNECTION>
-            connection.close()
-
 except KeyboardInterrupt:
     # now close the socket
     #<INSERT CODE TO CLOSE THE SOCKET>
     print("Server interupted by Ctrl-C, closing socket")
     server_socket.close()
     log.close()
+
+finally:
+    # Clean up the connection
+
+    #<INSERT CODE TO CLOSE THE CONNECTION>
+    connection.close()
+
 
 
 # UCC CS2505
