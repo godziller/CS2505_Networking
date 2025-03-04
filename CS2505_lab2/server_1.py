@@ -82,17 +82,16 @@ try:
                     t = now.strftime("%m/%d/%Y, %H:%M:%S")
                     log.write(f"DATE: {t}, USER: {client_address}, PORT: {port_number}")
 
-
-                    # encode() function returns bytes object
-                    connection.sendall(message.encode())
                     break
                 else:
                     print('no more data from', client_address)
                     recieved_message += data
             message = input("Please enter message to send: ")
             #logic for the server to send messages to client.
+            print ("ME> " + message)
             message = str(gethostbyname(gethostname()+'.local')) + ': ' + message
-            print(message)
+                   # encode() function returns bytes object
+            connection.sendall(message.encode())
 
 
         finally:
