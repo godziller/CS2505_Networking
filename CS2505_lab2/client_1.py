@@ -34,6 +34,7 @@ while True:
         print("Please enter a valid port number(integer)")
 
 server_address = (host_ip, port_number)
+client_address = gethostbyname(gethostname())+'.local'
 
 # output to terminal some info on the address details
 print('connecting to server at %s port %s' % server_address)
@@ -49,7 +50,10 @@ while True:
         #read input
         
         message = input("Please enter message to send: ")
-        message = gethostbyname(gethostname())+'.local' + ': ' + message
+        message = client_address + ': ' + message
+        
+        # I need this to allow the other party figure out how to terminate
+        message += '\n'
         
         # Data is transmitted to the server with sendall()
         # encode() function returns bytes object
