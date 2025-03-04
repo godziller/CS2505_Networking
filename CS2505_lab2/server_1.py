@@ -75,7 +75,7 @@ try:
                     
                     #logic for the server to send messages to client.
                     message = input("Please enter message to send: ")
-                    message = str(gethostbyname(gethostname())) + ': ' + message
+                    message = str(gethostbyname(gethostname()+'.local')) + ': ' + message
                     print(message)
 
                     t = now.strftime("%m/%d/%Y, %H:%M:%S")
