@@ -39,6 +39,7 @@ while True:
         message = input("Please enter message to send: ")
         message = client_address + ': ' + message  # Prepend the client address
         message += '\n'  # Add newline to indicate message end
+        print ("Client> " + message)
 
         # Send the message to the server
         client_socket.sendall(message.encode())
@@ -46,9 +47,18 @@ while True:
         # Receive the response from the server
         received_message = ""
         while True:
-            data = client_socket.recv(32).decode()  # Read data in chunks
+            data = client_socket.recv(32).decode()  # Decode to string
+
+            if not data:  # If no data is received, client may have closed the connection
+                print(f"No more data from {client_address}")
+                break
+
+            # Append the received data to the message
             received_message += data
-            if "\n" in received_message:  # Check if the message ends with a newline
+
+            # If a newline is detected, consider the message fully received
+            if '\n' in received_message:
+                print(f"Server> " + received_message)
                 break
 
         print("Server response:", received_message.strip())  # Display the server's message
