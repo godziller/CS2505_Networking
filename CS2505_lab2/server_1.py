@@ -67,14 +67,21 @@ try:
             #enter logic for log insertion.
 
             # Receive the data in small chunks and retransmit it
+            recieved_message = ""
+
+
+            message = input("Please enter message to send: ")
+
             while True:
                 # decode() function returns string object
+
                 data = connection.recv(32).decode()
-                if data:
-                    print('received from:"%s"' % data)
+
+                if '\n' in data:
+                    
+                    recieved_message += data
                     
                     #logic for the server to send messages to client.
-                    message = input("Please enter message to send: ")
                     message = str(gethostbyname(gethostname()+'.local')) + ': ' + message
                     print(message)
 
@@ -84,10 +91,10 @@ try:
 
                     # encode() function returns bytes object
                     connection.sendall(message.encode())
-
+                    break
                 else:
                     print('no more data from', client_address)
-                    break
+                    recieved_message += data
                 
         finally:
             # Clean up the connection
