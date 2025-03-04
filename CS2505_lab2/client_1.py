@@ -49,7 +49,7 @@ while True:
         #read input
         
         message = input("Please enter message to send: ")
-        message = gethostbyname(gethostname()) + ': ' + message
+        message = gethostbyname(gethostname())+'.local' + ': ' + message
         
         # Data is transmitted to the server with sendall()
         # encode() function returns bytes object
