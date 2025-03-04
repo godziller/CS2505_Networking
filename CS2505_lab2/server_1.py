@@ -13,24 +13,17 @@ server_socket = socket(AF_INET, SOCK_STREAM)
 #127.
 #the client has to mirror this even on the same machine.
 server_ip = gethostbyname(gethostname()+'.local') 
-while True:
-    try:
-        server_ip = input("Enter IP of reciever: ")
-        break
-    except:
-        print("Please enter a valid port number(integer)")
-
-
 
 # set values for host 'localhost' - meaning this machine and port number 10000
 # server_address = (server_ip, 10000)
 # there are 65k plus potential port numbers. However up to 1024 are typically
 # reserved for well agreed services like HTTP(80)
 # set port_number to user input -> error check for valid number i.e. int
+# enter port number between number (0-65535)
 
 while True:
     try:
-        port_number = int(input("Enter Port Number: "))
+        port_number = int(input("Enter Port Number((0-65535)): "))
         break
     except:
         print("Please enter a valid port number(integer)")

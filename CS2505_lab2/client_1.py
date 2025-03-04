@@ -1,5 +1,6 @@
 # from the socket module import all
 from socket import *
+import ipaddress
 
 # Create a TCP socket using the "socket" method
 # Hints: AF_INET is used for IPv4 protocols, SOCK_STREAM is used for TCP 
@@ -15,7 +16,8 @@ client_socket = socket(AF_INET, SOCK_STREAM)
 
 while True:
     try: 
-        host_ip = input("Enter Server ip: ")
+        host_ip = input("Enter the server address to connect to: ")
+        ipaddress.ip_address(host_ip)
         break
     except:
         print('Please enter valid server IP')
@@ -26,7 +28,7 @@ while True:
 
 while True:
     try:
-        port_number = int(input("Enter Port Number: "))
+        port_number = int(input("Enter the Server's Port Number: "))
         break
     except:
         print("Please enter a valid port number(integer)")
@@ -54,16 +56,20 @@ while True:
         client_socket.sendall(message.encode())
 
         # Look for the response
-        amount_received = 0
-        amount_expected = len(message)
-    
-        while amount_received < amount_expected:
+        recieved_message = ""
+
+        #this chunk of code with go around until it reads a string with '\n' (i.e the last byte sent) we then concatonate all things.
+        while True:
     	    # Data is read from the connection with recv()
             # decode() function returns string object
             data = client_socket.recv(32).decode()
-            amount_received += len(data)
-            print(data)
-            break
+            if "\n" in data:
+                recieved_message += data
+                break
+            else:
+                recieved_message += data
+        print(recieved_message)
+
 
     except KeyboardInterrupt:
         print('closing socket')
