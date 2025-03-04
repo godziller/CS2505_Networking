@@ -50,7 +50,7 @@ server_socket.bind(server_address)
 server_socket.listen()
 
 #instantiating log.:
-log = open('log.md',"w")
+log = open('log.txt',"w")
 
 # we want the server to run all the time, so set up a forever true while loop
 try:
@@ -70,8 +70,6 @@ try:
             recieved_message = ""
 
 
-            message = input("Please enter message to send: ")
-
             while True:
                 # decode() function returns string object
 
@@ -81,10 +79,6 @@ try:
                     
                     recieved_message += data
                     
-                    #logic for the server to send messages to client.
-                    message = str(gethostbyname(gethostname()+'.local')) + ': ' + message
-                    print(message)
-
                     t = now.strftime("%m/%d/%Y, %H:%M:%S")
                     log.write(f"DATE: {t}, USER: {client_address}, PORT: {port_number}")
 
@@ -95,7 +89,12 @@ try:
                 else:
                     print('no more data from', client_address)
                     recieved_message += data
-                
+            message = input("Please enter message to send: ")
+            #logic for the server to send messages to client.
+            message = str(gethostbyname(gethostname()+'.local')) + ': ' + message
+            print(message)
+
+
         finally:
             # Clean up the connection
 
