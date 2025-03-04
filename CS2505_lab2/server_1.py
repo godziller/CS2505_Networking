@@ -58,7 +58,7 @@ try:
 
                 # If a newline is detected, consider the message fully received
                 if '\n' in received_message:
-                    print(f"Server> " + received_message)
+                    print(f"Server> " + received_message.strip())
                     break
 
             # Log the timestamp of the received message
@@ -66,10 +66,9 @@ try:
             log.write(f"DATE: {t}, USER: {client_address}, PORT: {port_number}, MESSAGE: {received_message}\n")
 
             # Ask the server operator for a message to send back to the client
-            message = input("Please enter message to send: ")
+            message = input("Server enter message to send: ")
             message = server_ip + ': ' + message
             message += '\n'
-            print(f"ME> {message}")
 
             # Send the message back to the client
             connection.sendall(message.encode())

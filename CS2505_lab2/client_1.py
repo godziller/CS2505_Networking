@@ -36,7 +36,7 @@ print("Connection established.")
 while True:
     try:
         # Get the message from the user
-        message = input("Please enter message to send: ")
+        message = input("Client enter message to send: ")
         message = client_address + ': ' + message  # Prepend the client address
         message += '\n'  # Add newline to indicate message end
         print ("Client> " + message)
@@ -58,10 +58,8 @@ while True:
 
             # If a newline is detected, consider the message fully received
             if '\n' in received_message:
-                print(f"Server> " + received_message)
+                print(f"Server> " + received_message.strip())
                 break
-
-        print("Server response:", received_message.strip())  # Display the server's message
 
     except KeyboardInterrupt:
         print('Closing socket.')
