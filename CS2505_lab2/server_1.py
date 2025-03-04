@@ -58,7 +58,7 @@ try:
 
                 # If a newline is detected, consider the message fully received
                 if '\n' in received_message:
-                    print(f"Server> " + received_message.strip())
+                    print(f"Client> " + received_message.strip())
                     break
 
             # Log the timestamp of the received message
