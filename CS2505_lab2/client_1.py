@@ -34,7 +34,7 @@ while True:
         print("Please enter a valid port number(integer)")
 
 server_address = (host_ip, port_number)
-client_address = gethostbyname(gethostname())+'.local'
+client_address = gethostbyname(gethostname()+'.local')
 
 # output to terminal some info on the address details
 print('connecting to server at %s port %s' % server_address)
