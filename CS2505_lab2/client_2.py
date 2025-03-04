@@ -25,7 +25,7 @@ while True:
 server_address = (host_ip, port_number)
 
 # Get the client machine's address (using .local to resolve to local network address)
-client_address = gethostbyname(gethostname()) + '.local'
+client_address = gethostbyname(gethostname() + '.local')
 
 # Connect to the server
 print(f"Connecting to server at {host_ip} on port {port_number}...")
