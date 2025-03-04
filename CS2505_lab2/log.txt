@@ -1,2 +1,2 @@
-DATE: 03/04/2025, 22:51:37, USER: ('192.168.1.88', 58248), PORT: 5000, MESSAGE: 127.0.1.1.local: Hello from client
+DATE: 03/04/2025, 23:01:17, USER: ('192.168.1.88', 58038), PORT: 5000, MESSAGE: 172.17.0.1: Hello from client
 

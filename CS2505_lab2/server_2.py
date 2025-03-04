@@ -67,10 +67,9 @@ try:
 
             # Ask the server operator for a message to send back to the client
             message = input("Please enter message to send: ")
+            message = server_ip + ': ' + message
+            message += '\n'
             print(f"ME> {message}")
-
-            # Prepend the server's IP address to the message
-            message = f"{gethostbyname(gethostname() + '.local')}: {message}"
 
             # Send the message back to the client
             connection.sendall(message.encode())
