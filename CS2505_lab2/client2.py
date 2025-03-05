@@ -43,9 +43,9 @@ def send_message(client_socket, from_client_prompt):
         message += '\n'  # Add newline to indicate message end
         client_socket.sendall(message.encode())
 
-    except Exception:
+    except KeyboardInterrupt:
         print("Ctrl C... exiting")
-        raise
+        raise Exception
 
 
 def receive_message(client_socket):

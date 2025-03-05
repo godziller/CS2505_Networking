@@ -78,9 +78,9 @@ def send_message(client_connection, server_ip):
 
         # Send the message back to the client
         client_connection.sendall(message.encode())
-    except Exception:
+    except KeyboardInterrupt:
         print("Ctrl C... exiting")
-        raise
+        raise Exception
 
 if __name__ == '__main__':
 
