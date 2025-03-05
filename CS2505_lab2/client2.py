@@ -36,38 +36,50 @@ def client_setup():
     return client_socket
 
 def send_message(client_socket, from_client_prompt):
-    # Get the message from the user
-    message = input("Client> : ")
-    message = from_client_prompt + ': ' + message  # Prepend the client address
-    message += '\n'  # Add newline to indicate message end
-    client_socket.sendall(message.encode())
+    try:
+        # Get the message from the user
+        message = input("Client> : ")
+        message = from_client_prompt + ': ' + message  # Prepend the client address
+        message += '\n'  # Add newline to indicate message end
+        client_socket.sendall(message.encode())
+
+    except Exception:
+        print("Ctrl C... exiting")
+        raise
+
 
 def receive_message(client_socket):
     # Receive the response from the server
     received_message = ""
     while True:
-        data = client_socket.recv(32).decode()  # Decode to string
+        try:
+            data = client_socket.recv(32).decode()  # Decode to string
 
-        if not data:  # If no data is received, client may have closed the connection
-            print(f"No more data from {client_address}")
-            break
+            if not data:  # If no data is received, client may have closed the connection
+                print(f"No more data from {client_address}")
+                break
 
-        # Append the received data to the message
-        received_message += data
+            # Append the received data to the message
+            received_message += data
 
-        # If a newline is detected, consider the message fully received
-        if '\n' in received_message:
-            print(f"Server> " + received_message.strip())
-            break
+            # If a newline is detected, consider the message fully received
+            if '\n' in received_message:
+                print(f"Server> " + received_message.strip())
+                break
+        except Exception:
+            print("Ctrl C... exiting")
+            raise
+
 
 if __name__ == '__main__':
     client_socket = client_setup()
+    # Get the client machine's address (using .local to resolve to local network address)
+    # I don't need this for anything other than a prompt to server
+    client_address = gethostbyname(gethostname() + '.local')
 
     while True:
         try:
-            # Get the client machine's address (using .local to resolve to local network address)
-            # I don't need this for anything other than a prompt to server
-            client_address = gethostbyname(gethostname() + '.local')
+
 
             send_message(client_socket, client_address)
 
