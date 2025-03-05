@@ -102,7 +102,7 @@ if __name__ == '__main__':
             server_socket.close()
             log.close()
             break
-            
+
     print("Server shut down successfully.")
 
 
