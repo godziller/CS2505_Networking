@@ -98,14 +98,12 @@ if __name__ == '__main__':
         except Exception:
 
             print("Server interrupted by Ctrl-C, closing socket.")
-
             client_connection.close()
-
             server_socket.close()
-
             log.close()
-
-            print("Server shut down successfully.")
+            break
+            
+    print("Server shut down successfully.")
 
 
 
