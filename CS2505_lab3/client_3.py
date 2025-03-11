@@ -15,7 +15,7 @@ def do_get(client_socket, ipaddr, port, filename):
 
     # Construct the HTML request
     # Construct a minimal HTTP/1.1 GET request
-    http_get_message = f"GET /{filename} HTTP/1.1\r\n"
+    http_get_message = "GET /{} HTTP/1.1\r\n".format(filename)
     http_get_message += "\r\n"  # End of headers. I need this extra according to the protocol
 
     # now send the request
@@ -40,7 +40,7 @@ def client_setup(server_ip, server_port):
 
 
     # Connect to the server
-    print(f"Connecting to server at {server_ip} on port {server_port}...")
+    print("Connecting to server at {} on port {}...".format(server_ip, server_port))
     client_socket.connect(server_address)
     print("Connection established. Welcome to our web session")
     return client_socket
@@ -64,7 +64,7 @@ if __name__ == "__main__":
         if not (1 <= port <= 65535):
             raise ValueError("Port must be between 1 and 65535.")
     except ValueError as e:
-        print(f"Error: {e}")
+        print("Error: {}".format(e))
         sys.exit(1)
 
     filename = sys.argv[3]
