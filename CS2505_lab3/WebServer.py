@@ -8,7 +8,7 @@ from socket import *
 serverSocket = socket(AF_INET, SOCK_STREAM)
 
 # Assign a port number
-serverPort = 6789
+serverPort = 6788
 
 # Server Ip
 serverIp = gethostbyname(gethostname() + '.local')

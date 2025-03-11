@@ -11,7 +11,7 @@ def client_setup(server_host, server_port):
     server_address = (server_host, server_port)
 
     #Connecting to the server
-    print(f"Connecting to server at {server_host} on port {server_port}")
+    print("Connecting to server at {} on port {}".format(server_host, server_port))
     client_socket.connect(server_address)
     print("Connection Esatblished")
     return client_socket
@@ -19,10 +19,10 @@ def client_setup(server_host, server_port):
 # def send_message()
 def send_message(client_socket, filepath):
 
-    message = f"GET /{filepath} HTTP/1.1\r\n"
+    message = "GET /{} HTTP/1.1\r\n".format(filepath)
     message += "\r\n"
 
-    print(f"Sending Message {message}")
+    print("Sending Message {}".format(message))
     client_socket.sendall(message.encode())
 
     
