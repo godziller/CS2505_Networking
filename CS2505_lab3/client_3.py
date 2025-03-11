@@ -12,9 +12,6 @@ import ipaddress
 
 
 def do_get(client_socket, ipaddr, port, filename):
-    print(ipaddr)
-    print(port)
-    print(filename)
 
     # Construct the HTML request
     # Construct a minimal HTTP/1.1 GET request

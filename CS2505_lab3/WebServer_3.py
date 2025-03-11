@@ -8,10 +8,10 @@ from socket import *
 serverSocket = socket(AF_INET, SOCK_STREAM)
 
 # Assign a port number
-serverPort = 6788
-
+serverPort = 6789
+server_ip = gethostbyname(gethostname() + '.local')
 # Bind the socket to server address and server port
-serverSocket.bind(("", serverPort))
+serverSocket.bind((server_ip, serverPort))
 
 # Listen to at most 1 connection at a time
 serverSocket.listen(1)

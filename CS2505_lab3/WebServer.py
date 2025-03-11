@@ -11,7 +11,7 @@ serverSocket = socket(AF_INET, SOCK_STREAM)
 serverPort = 6789
 
 # Server Ip
-serverIp = gethostbyname(gethostname())
+serverIp = gethostbyname(gethostname() + '.local')
 # Bind the socket to server address and server port
 serverSocket.bind((serverIp, serverPort))
 
