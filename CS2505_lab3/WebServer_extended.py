@@ -8,7 +8,7 @@ from socket import *
 serverSocket = socket(AF_INET, SOCK_STREAM)
 
 # Assign a port number
-serverPort = 6789
+serverPort = 9047
 server_ip = gethostbyname(gethostname() + '.local')
 # Bind the socket to server address and server port
 serverSocket.bind((server_ip, serverPort))
@@ -36,7 +36,12 @@ try: # Adding this try block, so I can catch a ctrl-c and unbind from socket gra
             # First job - check if the client sent a 3-part message.
             # The ultimate format would be [METHOD PATH VERSION]
             # But here I just want to check 3 parts came in...
+
+            # Slide 33 of Appliction Layer deck
+            # request_lines is the entire message broken by carriage return/line feed
             request_lines = message.split("\r\n")  # Split request into lines
+
+            # this fisrt line [0] is the 'request line' - [Method File VERSION]
             request_parts = request_lines[0].split()  # First line is the request line
 
             if len(request_parts) < 3:
@@ -53,18 +58,19 @@ try: # Adding this try block, so I can catch a ctrl-c and unbind from socket gra
 
             # Now let's extract extra headers
             headers = {}
-            for line in request_lines[1:]:  # Skip the first line (request line)
-                if line.strip() == "":  # Stop at empty line (headers end)
+            for header_line in request_lines[1:]:  # Skip the first line (request line)
+                if header_line.strip() == "":  # Stop at empty line (headers end)
                     break
-                key, value = line.split(":", 1)  # Split only on first ":"
+                key, value = header_line.split(":", 1)  # Split only on first ":"
                 headers[key.strip()] = value.strip()
 
             # Debug: Print extracted headers
             print("🔹 Extracted Headers:", headers)
 
             # Check if User-Agent exists
+            # Slide 32 of app-layer deck
             user_agent = headers.get("User-Agent", "Unknown")
-            print(f"🔹 User-Agent: {user_agent}")
+            print("🔹 User-Agent: {}".format(user_agent))
             # Validate HTTP method (must be "GET")
             if method != "GET":
                 connectionSocket.send("HTTP/1.1 400 Bad Request\r\n\r\n".encode())
