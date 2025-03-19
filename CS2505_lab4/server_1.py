@@ -10,7 +10,7 @@ def start_server():
 
     # Bind the socket to the address and port
     server_socket.bind((server_host, server_port))
-    print(f"Server listening on port {server_port}...")
+    print("Server listening on port {}...".format(server_port))
 
     try:
         while True:
@@ -19,7 +19,7 @@ def start_server():
 
             # Decode the message from bytes to string
             decoded_message = message.decode("utf-8")
-            print(f"Received message: {decoded_message} from {client_address}")
+            print("Received message: {} from {}".format(decoded_message, client_address))
 
             # Convert the message to uppercase
             uppercase_message = decoded_message.upper()

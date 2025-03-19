@@ -11,7 +11,7 @@ def start_server():
 
     # Bind the socket to the address and port
     server_socket.bind((server_host, server_port))
-    print(f"Server listening on port {server_port}...")
+    print("Server listening on port {}...".format(server_port))
 
     while True:
         # Wait to receive a message from the client
@@ -19,19 +19,19 @@ def start_server():
 
         # Decode the message from bytes to string
         decoded_message = message.decode("utf-8")
-        print(f"Received message: {decoded_message} from {client_address}")
+        print("Received message: {decoded_message} from {client_address}".format(decoded_message, client_address))
 
         # Simulate packet loss
         rand = random.randint(1, 10)
         if rand > 5:
             # Extract message ID and original message
             message_id, original_message = decoded_message.split(":", 1)
-            print(f"Processed message ID {message_id}: {original_message}")
+            print("Processed message ID {}: {}".format(message_id, original_message))
 
             # Send acknowledgment back with the message ID
-            ack_message = f"ACK:{message_id}"
+            ack_message = "ACK:{}".format(message_id)
             server_socket.sendto(ack_message.encode("utf-8"), client_address)
-            print(f"Sent ACK for message ID {message_id}")
+            print("Sent ACK for message ID {}".format(message_id))
         else:
             print("Simulating packet loss. No response sent.")
 

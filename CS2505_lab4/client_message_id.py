@@ -22,10 +22,10 @@ def dns_lookup(server_domain):
     """
     try:
         server_ip = socket.gethostbyname(server_domain)
-        print(f"Resolved IP address for {server_domain}: {server_ip}")
+        print("Resolved IP address for {}: {}".format(server_domain, server_ip))
         return server_ip
     except socket.gaierror:
-        print(f"Unable to resolve the domain name: {server_domain}")
+        print("Unable to resolve the domain name: {}".format(server_domain))
         sys.exit(1)
 
 def start_client(server_ip, server_port, filename):
@@ -41,7 +41,7 @@ def start_client(server_ip, server_port, filename):
 
     # Open the file to read
     if not os.path.exists(filename):
-        print(f"File {filename} not found.")
+        print("File {} not found.".format(filename))
         sys.exit(1)
 
     message_id = 1  # Start with a message ID of 1
@@ -54,10 +54,10 @@ def start_client(server_ip, server_port, filename):
             # Stop-and-wait: send the message and wait for acknowledgment
             while True:
                 # Prepend the message ID to the message
-                message_with_id = f"{message_id}:{message}"
+                message_with_id = "{}:{}".format(message_id, message)
 
                 # Send the message to the server
-                print(f"Sending message with ID {message_id}: {message}")
+                print("Sending message with ID {}: {}".format(message_id, message))
                 client_socket.sendto(message_with_id.encode("utf-8"), (server_ip, server_port))
 
                 # Set the timeout period for select
@@ -72,13 +72,13 @@ def start_client(server_ip, server_port, filename):
                     response = response.decode("utf-8")
 
                     # Check if the response is an acknowledgment with the correct message ID
-                    if response == f"ACK:{message_id}":
-                        print(f"Acknowledgment received for message ID {message_id}.")
+                    if response == "ACK:{}".format(message_id):
+                        print("Acknowledgment received for message ID {}.".format(message_id))
                         message_id += 1  # Increment the message ID for the next message
                         break  # Move to the next message in the file
                 else:
                     # If the socket is not ready within the timeout, retransmit the message
-                    print(f"Timeout occurred for message ID {message_id}, retransmitting the message...")
+                    print("Timeout occurred for message ID {}, retransmitting the message...".format(message_id))
 
     # Close the socket after communication is done
     client_socket.close()
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     # Check if the provided server address is an IP address or domain name
     if is_valid_ip(server_address):
         server_ip = server_address  # If it's an IP address, use it directly
-        print(f"Using provided IP address: {server_ip}")
+        print("Using provided IP address: {}".format(server_ip))
     else:
         # Perform DNS lookup for the server domain name
         server_ip = dns_lookup(server_address)

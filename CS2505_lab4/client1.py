@@ -20,10 +20,10 @@ def dns_lookup(server_domain):
     """
     try:
         server_ip = socket.gethostbyname(server_domain)
-        print(f"Resolved IP address for {server_domain}: {server_ip}")
+        print("Resolved IP address for {}: {}",format(server_domain), server_ip)
         return server_ip
     except socket.gaierror:
-        print(f"Unable to resolve the domain name: {server_domain}")
+        print("Unable to resolve the domain name: {}".format(server_domain))
         sys.exit(1)
 
 def start_client(server_ip, server_port, filename):
@@ -35,7 +35,7 @@ def start_client(server_ip, server_port, filename):
 
     # Open the file to read
     if not os.path.exists(filename):
-        print(f"File {filename} not found.")
+        print("File {} not found.".format(filename))
         sys.exit(1)
 
     with open(filename, 'r') as file:
@@ -48,7 +48,7 @@ def start_client(server_ip, server_port, filename):
 
             # Receive the server's response
             response, _ = client_socket.recvfrom(2048)
-            print(f"Server response: {response.decode('utf-8')}")
+            print("Server response: ".format(response.decode()))
 
     # Close the socket after communication is done
     client_socket.close()
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     # Check if the provided server address is an IP address or domain name
     if is_valid_ip(server_address):
         server_ip = server_address  # If it's an IP address, use it directly
-        print(f"Using provided IP address: {server_ip}")
+        print("Using provided IP address: {}".format(server_ip))
     else:
         # Perform DNS lookup for the server domain name
         server_ip = dns_lookup(server_address)
