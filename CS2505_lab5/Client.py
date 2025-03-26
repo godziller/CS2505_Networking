@@ -25,6 +25,8 @@ def udp_ping_client(server_ip, server_port, count=10):
     
     for sequence in range(1, count + 1):
         send_time = datetime.datetime.now()
+
+        # This is where I think I would put my Student ID
         message = f"Ping {sequence} {send_time.timestamp()}".encode()
         
         try:
