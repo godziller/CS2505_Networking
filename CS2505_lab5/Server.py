@@ -33,6 +33,7 @@ def udp_ping_client(port, loss_rate=0.3):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
+        print("Usage: python Server.py <server_port_number>")
         sys.exit(1)
 
 
