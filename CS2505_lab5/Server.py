@@ -9,7 +9,7 @@ def udp_ping_client(port, loss_rate=0.3):
 
     # Bind the socket to the port
     server_socket.bind(('',port))
-    print(f"Ping server listening on port {port} with packet loss rate {loss_rate*100}%")
+    print("Ping server listening on port {} with packet loss rate {:.2f}%".format(port, loss_rate * 100))
 
     try:
         while True:
@@ -19,12 +19,12 @@ def udp_ping_client(port, loss_rate=0.3):
 
             # Simulate packet loss
             if random.random() < loss_rate:
-                print(f"Packet from {client_address} dropped.")
+                print("Packet from {} dropped.".format(client_address))
                 continue
 
             # Echo the message back to the client
             server_socket.sendto(message,  client_address)
-            print(f"Echoed packet to {client_address}")
+            print("Echoed packet to {}".format(client_address))
 
     except KeyboardInterrupt:
         print("\nServer shutting down")

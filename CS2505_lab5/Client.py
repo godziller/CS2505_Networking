@@ -11,7 +11,7 @@ def calculate_statistics(rtt_list):
     max_rtt = max(rtt_list)
     avg_rtt = sum(rtt_list) / len(rtt_list)
     stddev = math.sqrt(sum((x - avg_rtt)**2 for x in rtt_list) / len(rtt_list))
-    
+
     return min_rtt, max_rtt, avg_rtt, stddev
 
 def udp_ping_client(server_ip, server_port, count=10):
@@ -21,7 +21,7 @@ def udp_ping_client(server_ip, server_port, count=10):
     rtt_list = []
     packets_lost = 0
     
-    print(f"PING {server_ip} using UDP")
+    print("PING {} using UDP".format(server_ip))
     
     for sequence in range(1, count + 1):
         send_time = datetime.datetime.now()
@@ -37,10 +37,10 @@ def udp_ping_client(server_ip, server_port, count=10):
                 
                 decoded = response.decode()
                 if decoded.startswith(f"Ping {sequence}"):
-                    print(f"{len(response)} bytes from {server_address[0]}: udp_seq={sequence} time={rtt:.3f} ms")
+                    print("{} bytes from {}: udp_seq={} time={:.3f} ms".format(len(response), server_address[0], sequence,rtt))
                     rtt_list.append(rtt)
                 else:
-                    print(f"Received corrupted packet from {server_address[0]}")
+                    print("Received corrupted packet from {}".format(server_address[0]))
                     packets_lost += 1
                     
             except socket.timeout:
@@ -48,21 +48,21 @@ def udp_ping_client(server_ip, server_port, count=10):
                 packets_lost += 1
                 
         except Exception as e:
-            print(f"Error sending packet: {e}")
+            print("Error sending packet: {}".format(e))
             packets_lost += 1
     
     # Print statistics
-    print(f"\n--- {server_ip} ping statistics ---")
+    print("\n--- {} ping statistics ---".format(server_ip))
     packets_sent = count
     packets_received = packets_sent - packets_lost
     loss_percentage = (packets_lost / packets_sent) * 100 if packets_sent > 0 else 0
     
-    print(f"{packets_sent} packets transmitted, {packets_received} received, {loss_percentage:.2f}% packet loss")
+    print("{} packets transmitted, {} received, {:.2f}% packet loss".format(packets_sent, packets_received, loss_percentage))
     
     if rtt_list:
         min_rtt, max_rtt, avg_rtt, stddev = calculate_statistics(rtt_list)
-        print(f"round-trip min/avg/max/stddev = {min_rtt:.3f}/{avg_rtt:.3f}/{max_rtt:.3f}/{stddev:.3f} ms")
-    
+        print("round-trip min/avg/max/stddev = {:.3f}/{:.3f}/{:.3f}/{:.3f} ms".format(min_rtt, avg_rtt, max_rtt, stddev))
+
     client_socket.close()
 
 if __name__ == "__main__":
